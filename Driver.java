@@ -1,16 +1,30 @@
+import java.io.File;
+
 public class Driver {
     public static void main(String[] args) {
-        Polynomial p = new Polynomial();
-        System.out.println(p.evaluate(3));
-        double [] c1 = {6,0,0,5};
-        Polynomial p1 = new Polynomial(c1);
-        double [] c2 = {0,-2,0,0,-9};
-        Polynomial p2 = new Polynomial(c2);
-        Polynomial s = p1.add(p2);
-        System.out.println("s(0.1) = " + s.evaluate(0.1));
-        if(s.hasRoot(1))
-            System.out.println("1 is a root of s");
-        else
-            System.out.println("1 is not a root of s");
+        double[] c1 = {6, -2, 5};
+        int[] e1 = {0, 1, 3};
+        Polynomial p1 = new Polynomial(c1, e1); 
+        
+        double[] c2 = {-3, 2};
+        int[] e2 = {1, 2};
+        Polynomial p2 = new Polynomial(c2, e2);         
+        Polynomial p3 = p1.multiply(p2);
+        p3.saveToFile("output.txt");
+        System.out.println("Polynomial multiplication tested and saved to output.txt");
+
+        try {
+            File testFile = new File("input.txt");
+            if(testFile.createNewFile() || testFile.exists()) {
+                java.io.FileWriter myWriter = new java.io.FileWriter(testFile);
+                myWriter.write("5-3x2+7x8");
+                myWriter.close();
+                
+                Polynomial p4 = new Polynomial(testFile);
+                System.out.println("Read from file test, evaluate at x=1: " + p4.evaluate(1)); 
+            }
+        } catch (Exception e) {
+            System.out.println("File testing error.");
+        }
     }
 }
